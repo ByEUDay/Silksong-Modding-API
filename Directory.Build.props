@@ -1,0 +1,29 @@
+<Project>
+  <PropertyGroup>
+    <!--
+      编译前必须指定你本地 Silksong 的 Managed 目录,两种方式二选一:
+
+      方式一(推荐,不会被提交进 git):新建一个
+      Directory.Build.props.local.xml 之类的文件放你自己的真实路径,
+      或者直接在命令行传参覆盖:
+        dotnet build -p:SilksongManagedDir="你的路径"
+
+      方式二:改下面这一行,但注意里面不要出现你的真实用户名/账号信息,
+      提交前用 git status 检查一遍。
+
+      各平台参考路径(Steam 默认安装位置):
+      Windows: C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight Silksong\Hollow Knight Silksong_Data\Managed
+      Linux/Steam Deck: ~/.steam/steam/steamapps/common/Hollow Knight Silksong/Hollow Knight Silksong_Data/Managed
+      macOS: ~/Library/Application Support/Steam/steamapps/common/Hollow Knight Silksong/Hollow Knight Silksong.app/Contents/Resources/Data/Managed
+    -->
+    <SilksongManagedDir Condition="'$(SilksongManagedDir)' == '~/Library/Application Support/Steam/steamapps/common/Hollow Knight Silksong/Hollow Knight Silksong.app/Contents/Resources/Data/Managed'"></SilksongManagedDir>
+  </PropertyGroup>
+
+  <!-- 没配置路径就直接报错终止,好过让编译器去猜一堆莫名其妙的"找不到引用"错误 -->
+  <Target Name="CheckSilksongManagedDir" BeforeTargets="Build">
+    <Error
+      Condition="'$(SilksongManagedDir)' == ''"
+      Text="请设置 SilksongManagedDir 指向你本地 Silksong 的 Managed 目录,例如: dotnet build -p:SilksongManagedDir=&quot;/path/to/Managed&quot; (见本文件注释里的各平台默认路径)" />
+  </Target>
+</Project>
+

@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <AssemblyName>SilksongPrepatcher</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- 用于读写/修改 IL 的核心库,BepInEx 内部其实也是靠它,
+         区别只是我们自己调用,不经过 BepInEx 的 Chainloader -->
+    <PackageReference Include="Mono.Cecil" Version="0.11.*" />
+  </ItemGroup>
+
+</Project>
