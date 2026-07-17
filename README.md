@@ -12,10 +12,8 @@
 
 1.Download the API.
    
-2.Open the .sln file.
+2.Open the .sln file and change it.
    
-3.Change the .sln file.
+3.Open the .props file and fill in the path to the Managed file.
    
-4.Open the .props file and fill in the path to the Managed file.
-   
-5.Compile.
+4.Compile.
