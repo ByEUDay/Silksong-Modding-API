@@ -80,7 +80,7 @@ namespace SilksongModLoader
                 }
 
                 ModStatus.LoadedCount++;
-                yield return null; // 每加载一个 mod 让一帧,进度条才能实时刷新
+                yield return null;
             }
 
             ModLog.Info($"共加载 {ModStatus.Mods.Count} 个 mod。");
