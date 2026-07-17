@@ -6,7 +6,7 @@
       Linux/Steam Deck: ~/.steam/steam/steamapps/common/Hollow Knight Silksong/Hollow Knight Silksong_Data/Managed
       macOS: ~/Library/Application Support/Steam/steamapps/common/Hollow Knight Silksong/Hollow Knight Silksong.app/Contents/Resources/Data/Managed
     -->
-    <SilksongManagedDir Condition="'$(SilksongManagedDir)' == 'Your Hollow Knight Silksong app (.exe or .app) path.'"></SilksongManagedDir>
+    <SilksongManagedDir Condition="'$(SilksongManagedDir)' == ''">Your Hollow Knight Silksong app (.exe or .app) path.</SilksongManagedDir>
   </PropertyGroup>
 </Project>
 
