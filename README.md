@@ -10,12 +10,12 @@
 
 ## If you want to create a Mod: 
 
-1. Download the API.
+1.Download the API.
    
-2. Open the .sln file.
+2.Open the .sln file.
    
-3. Change the .sln file.
+3.Change the .sln file.
    
-4. Open the .props file and fill in the path to the Managed file.
+4.Open the .props file and fill in the path to the Managed file.
    
-5. Compile.
+5.Compile.
