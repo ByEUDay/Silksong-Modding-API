@@ -1,28 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <!-- Silksong 的 Assembly-CSharp.dll 目前基于 Mono backend + .NET Framework 4.x profile,
-         用 netstandard2.1 编译出的 dll 可以被 Mono 运行时直接加载。
-         如果你确认游戏是 IL2CPP backend,这里要换成对应的 interop 工程,思路不同,详见 README。 -->
     <TargetFramework>netstandard2.1</TargetFramework>
     <LangVersion>latest</LangVersion>
     <AssemblyName>SilksongModLoader</AssemblyName>
     <Nullable>enable</Nullable>
-    <!-- 关键:默认情况下 dotnet build 不会把 NuGet 依赖(如 MonoMod.RuntimeDetour)
-         拷贝到输出目录,因为"类库"项目假设由调用方(另一个.NET程序)通过
-         deps.json 解析依赖。但游戏引擎不认识这套机制,只会按文件名直接加载 dll,
-         所以必须打开这个开关,强制把所有依赖 dll 一起输出到 bin 目录。 -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <!-- 不要把依赖打包进最终 dll 之外的形式,MonoMod.RuntimeDetour 需要跟随发布 -->
   </PropertyGroup>
-
   <ItemGroup>
-    <!-- 用于运行时方法级 hook,替代 Harmony/BepInEx 的检测方案 -->
     <PackageReference Include="MonoMod.RuntimeDetour" Version="25.*" />
   </ItemGroup>
-
   <ItemGroup>
-    <!-- 引用游戏自身的托管 dll 以便类型对得上(路径按你本地游戏安装位置改) -->
     <Reference Include="Assembly-CSharp">
       <HintPath>$(SilksongManagedDir)\Assembly-CSharp.dll</HintPath>
       <Private>false</Private>
@@ -31,11 +18,9 @@
       <HintPath>$(SilksongManagedDir)\UnityEngine.CoreModule.dll</HintPath>
       <Private>false</Private>
     </Reference>
-    <!-- GUI/GUIStyle/GUI.skin 等 IMGUI 相关类型在这个模块里,用于画进度条和mod列表 -->
     <Reference Include="UnityEngine.IMGUIModule">
       <HintPath>$(SilksongManagedDir)\UnityEngine.IMGUIModule.dll</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>
-
 </Project>
