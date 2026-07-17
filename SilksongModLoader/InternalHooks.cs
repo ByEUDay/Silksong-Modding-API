@@ -21,6 +21,15 @@ namespace SilksongModLoader
             behaviour.ModsDir = Path.Combine(loaderDir, "Mods");
 
             ModLog.Info("已挂载 Unity 原生 Ticker,OnHeroUpdate 将每帧触发,mod 将逐帧加载。");
+
+            try
+            {
+                GameHooks.ApplySaveLoadHooks();
+            }
+            catch (Exception e)
+            {
+                ModLog.Error($"GameHooks.ApplySaveLoadHooks 执行失败,存档相关事件可能无法触发: {e}");
+            }
         }
     }
     internal class ModTickerBehaviour : MonoBehaviour
@@ -39,6 +48,12 @@ namespace SilksongModLoader
         {
             try { ModHooks.RaiseHeroUpdate(); }
             catch (Exception e) { ModLog.Error($"OnHeroUpdate 订阅者抛出异常: {e}"); }
+        }
+
+        private void OnApplicationQuit()
+        {
+            try { HookHelper.RemoveAll(); }
+            catch (Exception e) { ModLog.Error($"退出时清理 hook 失败: {e}"); }
         }
 
         private IEnumerator LoadModsRoutine()
