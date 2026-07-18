@@ -48,6 +48,13 @@ namespace SilksongModLoader
         {
             try { ModHooks.RaiseHeroUpdate(); }
             catch (Exception e) { ModLog.Error($"OnHeroUpdate 订阅者抛出异常: {e}"); }
+
+            if (Input.GetKeyDown(KeyCode.F9))
+            {
+                ModMenuUI.Toggle();
+            }
+
+            ModMenuUI.EnforceInputBlock();
         }
 
         private void OnApplicationQuit()
@@ -58,6 +65,8 @@ namespace SilksongModLoader
 
         private IEnumerator LoadModsRoutine()
         {
+            ModConfig.Load(ModsDir);
+
             var discovered = Entry.DiscoverMods(ModsDir);
             foreach (var mod in discovered)
             {
@@ -67,6 +76,15 @@ namespace SilksongModLoader
 
             foreach (var entry in ModStatus.Mods)
             {
+                if (ModConfig.IsDisabled(entry.Mod.Name))
+                {
+                    entry.State = ModLoadState.Disabled;
+                    ModLog.Info($"{entry.Mod.Name} 已被禁用,跳过初始化。");
+                    ModStatus.LoadedCount++;
+                    yield return null;
+                    continue;
+                }
+
                 try
                 {
                     entry.Mod.Initialize();
@@ -97,6 +115,7 @@ namespace SilksongModLoader
             }
 
             DrawModList();
+            ModMenuUI.Draw();
         }
 
         private void DrawLoadingBar()
@@ -126,6 +145,7 @@ namespace SilksongModLoader
                 {
                     ModLoadState.Loaded => $"{entry.Mod.Name} v{entry.Mod.Version}",
                     ModLoadState.Failed => $"{entry.Mod.Name} (加载失败)",
+                    ModLoadState.Disabled => $"{entry.Mod.Name} (已禁用)",
                     _ => $"{entry.Mod.Name} (等待中...)"
                 };
                 GUI.Label(new Rect(8, y, 400, 20), text, style);

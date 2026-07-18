@@ -2,11 +2,12 @@ using System.Collections.Generic;
 
 namespace SilksongModLoader
 {
-    internal enum ModLoadState { Pending, Loaded, Failed }
+    internal enum ModLoadState { Pending, Loaded, Failed, Disabled }
     internal class ModEntry
     {
         public IMod Mod = null!;
         public ModLoadState State = ModLoadState.Pending;
+        public bool PendingRestart;
     }
     internal static class ModStatus
     {
