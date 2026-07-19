@@ -6,8 +6,31 @@
     <Nullable>enable</Nullable>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
-  <ItemGroup>
+  <!--
+    与 BepInEx 共存模式:
+    默认(BepInExCoreDir 为空)时,依旧用 NuGet 拉自己的 MonoMod.RuntimeDetour,
+    适合"完全不装 BepInEx,只用本 Loader"的场景。
+
+    如果你的机器上同时装了 BepInEx,想让两者共存、不要在游戏进程里加载两份
+    版本不同的 MonoMod(这是之前导致冲突的原因),请在 Directory.Build.props
+    里把 BepInExCoreDir 指向你那份 BepInEx 的 core 文件夹
+    (例如 .../Hollow Knight Silksong/BepInEx/core),然后重新编译。
+    编译完之后,不要把本项目输出目录里的 MonoMod.RuntimeDetour.dll / MonoMod.Utils.dll
+    复制进 Managed 目录 —— 只用 BepInEx/core 里已有的那两个文件即可,
+    避免同一进程里加载两份不同版本的 MonoMod。
+  -->
+  <ItemGroup Condition="'$(BepInExCoreDir)' == ''">
     <PackageReference Include="MonoMod.RuntimeDetour" Version="25.*" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(BepInExCoreDir)' != ''">
+    <Reference Include="MonoMod.RuntimeDetour">
+      <HintPath>$(BepInExCoreDir)\MonoMod.RuntimeDetour.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="MonoMod.Utils">
+      <HintPath>$(BepInExCoreDir)\MonoMod.Utils.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
