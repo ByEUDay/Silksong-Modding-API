@@ -6,7 +6,7 @@
       Linux/Steam Deck: ~/.steam/steam/steamapps/common/Hollow Knight Silksong/Hollow Knight Silksong_Data/Managed
       macOS: ~/Library/Application Support/Steam/steamapps/common/Hollow Knight Silksong/Hollow Knight Silksong.app/Contents/Resources/Data/Managed
     -->
-    <SilksongManagedDir Condition="'$(SilksongManagedDir)' == ''">Your Hollow Knight Silksong app (.exe or .app) path.</SilksongManagedDir>
+    <SilksongManagedDir Condition="'$(SilksongManagedDir)' == ''">Your Hollow Knight Silksong Managed folder path.</SilksongManagedDir>
 
     <!--
       可选: 只有当你想让 SilksongModLoader 和 BepInEx 在同一个游戏里共存时才填。
@@ -15,7 +15,7 @@
       (跟游戏 exe/app 同级的 BepInEx 文件夹下的 core 子目录)
       留空则 SilksongModLoader 会用 NuGet 拉自己独立的一份 MonoMod, 适合单独使用、不装 BepInEx 的场景。
     -->
-    <BepInExCoreDir Condition="'$(BepInExCoreDir)' == ''"></BepInExCoreDir>
+    <BepInExCoreDir Condition="'$(BepInExCoreDir)' == ''">Your BepInEx core folder path.</BepInExCoreDir>
   </PropertyGroup>
 </Project>
 
