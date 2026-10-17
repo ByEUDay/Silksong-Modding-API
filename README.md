@@ -24,7 +24,7 @@ GAME_MANAGED="/your/game/path/to/Managed" ./build.sh
 
 ### 安装 Mod
 
-将编译好的 Mod DLL 放入：
+将编译好或从Release下载打包好的 Mod DLL 放入：
 
 ```
 <游戏Managed目录>/Mods/
