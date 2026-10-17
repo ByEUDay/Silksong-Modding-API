@@ -57,8 +57,8 @@ HAS_LOC=0
 if [[ -f "$GAME_MANAGED/TeamCherry.Localization.dll" ]]; then backup TeamCherry.Localization; HAS_LOC=1; fi
 HAS_PM=0
 if [[ -f "$GAME_MANAGED/PlayMaker.dll" ]]; then backup PlayMaker; HAS_PM=1; fi
-rm -rf "$VANILLA" "$WORK" "$LOC_WORK" "$PM_WORK" "$OUT"
-mkdir -p "$VANILLA" "$WORK" "$OUT"
+rm -rf "$VANILLA" "$WORK" "$LOC_WORK" "$PM_WORK"
+mkdir -p "$VANILLA" "$WORK"
 # 复制 Managed 下的全部 dll（排除我们装进去的 MonoMod/MMHOOK 文件，以及要从备份还原的两个）
 find "$GAME_MANAGED" -maxdepth 1 -name '*.dll' \
   ! -name 'MMHOOK_*' ! -name 'MonoMod*' ! -name 'Mono.Cecil*' \
@@ -184,7 +184,8 @@ done
 mkdir -p "$OUT/Mods"
 
 if [[ $INSTALL -eq 1 ]]; then
-  cp -R "$OUT"/. "$GAME_MANAGED/"
+  find "$OUT" -maxdepth 1 -name '*.dll' -exec cp {} "$GAME_MANAGED/" \;
+  mkdir -p "$GAME_MANAGED/Mods"
   echo "已安装到: $GAME_MANAGED"
   echo "把 Mod 的 dll 放进: $GAME_MANAGED/Mods/"
 else
