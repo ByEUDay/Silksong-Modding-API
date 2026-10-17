@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <!-- 输出名必须是 Assembly-CSharp.mm，MonoMod 才会把它当成 Assembly-CSharp 的补丁 -->
+    <AssemblyName>Assembly-CSharp.mm</AssemblyName>
+    <RootNamespace>Modding</RootNamespace>
+    <!-- Silksong 的 Assembly-CSharp 目标框架为 netstandard2.1 -->
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <!-- build.sh 在完整编译失败时会用 NO_FSMUTIL;NO_PRELOADER 重试 -->
+    <DefineConstants>$(DefineConstants);$(ExtraDefines)</DefineConstants>
+    <Nullable>disable</Nullable>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <NoWarn>$(NoWarn);CS0626;CS0108;CS0109;CS0114;CS0649;CS0169;CS0414;CS1591</NoWarn>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <!-- 原版 Managed 目录的拷贝，由 build.sh 准备 -->
+    <VanillaDir Condition="'$(VanillaDir)' == ''">$(MSBuildProjectDirectory)/../Vanilla</VanillaDir>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(NoLanguageHooks)' == 'true'">
+    <!-- Localization 没能打上补丁时，排除本地化相关的 using -->
+    <DefineConstants>$(DefineConstants);NO_LANGUAGEHOOKS</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(NoPlayMakerHooks)' == 'true'">
+    <!-- PlayMaker 没能打上补丁时，排除 PlayMakerHooks 的转发和桥接 -->
+    <DefineConstants>$(DefineConstants);NO_PLAYMAKERHOOKS</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MonoMod" Version="22.7.31.1" PrivateAssets="all" />
+    <PackageReference Include="MonoMod.RuntimeDetour" Version="22.7.31.1" />
+    <PackageReference Include="MonoMod.RuntimeDetour.HookGen" Version="22.7.31.1" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- 引用原版 DLL；排除 BCL，避免与 netstandard2.1 引用程序集冲突 -->
+    <Reference Include="$(VanillaDir)/*.dll"
+               Exclude="$(VanillaDir)/System*.dll;$(VanillaDir)/mscorlib.dll;$(VanillaDir)/netstandard.dll;$(VanillaDir)/Microsoft*.dll;$(VanillaDir)/Mono*.dll;$(VanillaDir)/Assembly-CSharp.mm.dll">
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+</Project>

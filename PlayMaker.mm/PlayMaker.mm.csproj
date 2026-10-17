@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <!-- 名字必须是 <目标程序集>.mm，MonoMod 才会把它当成 PlayMaker 的补丁 -->
+    <AssemblyName>PlayMaker.mm</AssemblyName>
+    <RootNamespace>Modding</RootNamespace>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <NoWarn>$(NoWarn);CS0626;CS0108;CS0109;CS0114;CS0649;CS0169;CS0414;CS1591</NoWarn>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <VanillaDir Condition="'$(VanillaDir)' == ''">$(MSBuildProjectDirectory)/../Vanilla</VanillaDir>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(NoVariableHooks)' == 'true'">
+    <!-- 变量写入钩子（FsmFloat/Int/Bool/String 的 Value setter）。MonoMod 对属性访问器的补丁失败时，build.sh 会关掉它重试 -->
+    <Compile Remove="Patches/FsmVariables.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MonoMod" Version="22.7.31.1" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- PlayMaker 只依赖 Unity。不要引用 Assembly-CSharp（它反过来引用 PlayMaker），
+         所以钩子本体放在这一侧，Assembly-CSharp 里的 ModHooks 只做转发 -->
+    <Reference Include="$(VanillaDir)/UnityEngine*.dll;$(VanillaDir)/PlayMaker.dll"
+               Exclude="$(VanillaDir)/PlayMaker.mm.dll">
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+</Project>

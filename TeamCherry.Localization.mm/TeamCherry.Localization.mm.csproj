@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <!-- 名字必须是 <目标程序集>.mm，MonoMod 才会把它当成 TeamCherry.Localization 的补丁 -->
+    <AssemblyName>TeamCherry.Localization.mm</AssemblyName>
+    <RootNamespace>TeamCherry.Localization</RootNamespace>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <NoWarn>$(NoWarn);CS0626;CS0108;CS0109;CS0114;CS0649;CS0169;CS0414;CS1591</NoWarn>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <VanillaDir Condition="'$(VanillaDir)' == ''">$(MSBuildProjectDirectory)/../Vanilla</VanillaDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MonoMod" Version="22.7.31.1" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Localization 只依赖 Unity / PlayMaker / TeamCherry.*，不引用 Assembly-CSharp（Assembly-CSharp 反过来引用它） -->
+    <Reference Include="$(VanillaDir)/UnityEngine*.dll;$(VanillaDir)/PlayMaker.dll;$(VanillaDir)/TeamCherry.*.dll"
+               Exclude="$(VanillaDir)/TeamCherry.Localization.mm.dll">
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+</Project>
