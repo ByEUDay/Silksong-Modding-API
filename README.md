@@ -12,6 +12,7 @@
 ```bash
 ./build.sh
 ```
+没有build.ps1，懒得写，也无法验证。
 
 默认目标为 Steam macOS 路径（作者是Mac）。其他路径请设置环境变量：
 
